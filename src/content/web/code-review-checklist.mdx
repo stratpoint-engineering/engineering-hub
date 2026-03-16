@@ -1,0 +1,56 @@
+---
+title: Web Code Review Checklist
+---
+
+# Web Code Review Checklist
+
+Use this checklist when reviewing web PRs. Items marked **[Required]** must pass before approval. Items marked **[Suggested]** are judgment calls.
+
+## Functionality
+
+- [ ] **[Required]** The code does what the ticket describes
+- [ ] **[Required]** Edge cases are handled (empty states, loading states, errors)
+- [ ] **[Required]** No regressions in existing functionality
+
+## Code Quality
+
+- [ ] **[Required]** TypeScript types are explicit — no untyped `any` without justification
+- [ ] **[Required]** No commented-out code or dead code
+- [ ] **[Suggested]** Components are small and focused (single responsibility)
+- [ ] **[Suggested]** No premature abstractions — duplication is acceptable if abstraction is unclear
+
+## Performance
+
+- [ ] **[Required]** No unnecessary re-renders (check `useEffect` dependencies)
+- [ ] **[Required]** Images are optimised (using `next/image` or equivalent)
+- [ ] **[Suggested]** Heavy components are lazy-loaded where appropriate
+- [ ] **[Suggested]** Bundle impact of new dependencies considered
+
+## Testing
+
+- [ ] **[Required]** Unit tests cover the core logic
+- [ ] **[Required]** Tests are readable and document intent, not implementation
+- [ ] **[Suggested]** E2E test added for new user-facing flows
+
+## Security
+
+- [ ] **[Required]** No secrets or credentials in code
+- [ ] **[Required]** User input is sanitised before rendering (no XSS vectors)
+- [ ] **[Required]** API calls include appropriate auth headers
+- [ ] **[Suggested]** Content Security Policy implications considered for new iframes or scripts
+
+## Accessibility
+
+- [ ] **[Required]** Interactive elements are keyboard navigable
+- [ ] **[Required]** Images have meaningful `alt` text
+- [ ] **[Suggested]** Colour contrast passes WCAG AA
+- [ ] **[Suggested]** ARIA labels added where native semantics are insufficient
+
+## Documentation
+
+- [ ] **[Suggested]** Complex logic has explanatory comments
+- [ ] **[Suggested]** README or hub page updated if a new pattern is introduced
+
+---
+
+*See also: [Engineering Principles](/engineering-principles) for the values behind these checks.*

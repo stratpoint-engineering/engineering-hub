@@ -1,0 +1,45 @@
+---
+title: Mobile Code Review Checklist
+---
+
+# Mobile Code Review Checklist
+
+Use this checklist when reviewing mobile PRs (React Native and Flutter). Items marked **[Required]** must pass before approval. Items marked **[Suggested]** are judgment calls.
+
+## Functionality
+
+- [ ] **[Required]** The code does what the ticket describes
+- [ ] **[Required]** Edge cases handled: loading, empty, and error states are all handled
+- [ ] **[Required]** Tested on both iOS and Android (or in simulators) before review request
+
+## Code Quality
+
+- [ ] **[Required]** No hardcoded strings — copy lives in localisation files
+- [ ] **[Required]** No hardcoded colours or dimensions — uses design tokens / theme
+- [ ] **[Required]** No commented-out code or dead code
+
+## Performance
+
+- [ ] **[Required]** FlatList / ListView used instead of mapping inside ScrollView for long lists
+- [ ] **[Suggested]** Image assets are appropriately sized and cached
+- [ ] **[Suggested]** No blocking operations on the UI thread
+
+## Security
+
+- [ ] **[Required]** No secrets or API keys in source code
+- [ ] **[Required]** Sensitive data (tokens, PII) stored in secure storage, not AsyncStorage/SharedPreferences
+- [ ] **[Suggested]** Deep link handlers validate incoming parameters
+
+## Accessibility
+
+- [ ] **[Required]** Touchable elements have meaningful accessibility labels
+- [ ] **[Suggested]** Screen reader order makes sense
+
+## Testing
+
+- [ ] **[Required]** Unit tests cover the core logic
+- [ ] **[Suggested]** E2E scenario covered for critical user flows
+
+---
+
+*See also: [Engineering Principles](/engineering-principles) for the values behind these checks.*

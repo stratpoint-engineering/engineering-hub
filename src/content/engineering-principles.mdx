@@ -1,0 +1,53 @@
+---
+title: Engineering Principles
+---
+
+# Engineering Principles
+
+These principles are not aspirational slogans — they are the behaviors we hold each other to in code reviews, architecture discussions, and day-to-day engineering work.
+
+## 1. We Build for Maintainability, Not Cleverness
+
+Code is read far more often than it is written. Optimize for the engineer who will read it six months from now — even if that engineer is you.
+
+- Prefer explicit over implicit.
+- Name things clearly. A longer, descriptive name is almost always better than a short, cryptic one.
+- Avoid premature abstractions. Duplication is cheaper than the wrong abstraction.
+- If you need a comment to explain *what* the code does, consider rewriting it. Comments should explain *why*.
+
+## 2. We Document as We Go, Not After
+
+Documentation written after the fact is rarely accurate. Documentation written before the work begins shapes better thinking.
+
+- Update the relevant page in this hub when you establish or change a pattern.
+- Write ADRs (Architecture Decision Records) for any significant technical decision.
+- Keep READMEs current — a stale README is worse than no README.
+- Document the *why* of design choices, not just the *what*.
+
+## 3. We Review Each Other's Code with Respect
+
+Code review is a collaboration, not a judgment. The goal is to ship better software together.
+
+- Review the code, not the person.
+- Be specific and constructive. "This could be clearer as X" is more useful than "this is confusing."
+- Distinguish between blocking feedback (must change) and suggestions (nice to have).
+- Authors: respond to every comment, even if just to acknowledge and decline.
+- Approve when the code is good enough to ship, not when it is perfect.
+
+## 4. We Embrace AI Tools with Critical Judgment
+
+AI-assisted development accelerates us — but we own the output. We do not ship code we cannot explain.
+
+- Use AI tools to accelerate research, boilerplate, and exploration.
+- Review every AI-generated line as carefully as any other line.
+- Never commit secrets, credentials, or proprietary data to AI context.
+- See the [AI SDLC Framework](/ai-sdlc-framework) for approved tools and ground rules.
+
+## 5. We Own Our Systems End-to-End
+
+"It works on my machine" and "that's DevOps's problem" are not acceptable stances. Engineers own their systems from code to production.
+
+- Understand how your service is deployed and monitored.
+- Set up alerts before something breaks, not after.
+- Be on-call ready: know your runbooks, know your dashboards.
+- When something breaks in production, participate in the postmortem and help fix the root cause.
