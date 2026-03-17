@@ -109,7 +109,7 @@ html body article li,
 html body article ul,
 html body article ol,
 html body article blockquote {
-  font-size: 1rem !important;
+  font-size: 0.875rem !important;
   line-height: 1.85 !important;
   letter-spacing: 0.01em !important;
   color: var(--text-primary) !important;
@@ -210,27 +210,23 @@ article li {
   line-height: 1.75;
 }
 
-article.nextra-body-typesetting-article {
-  font-size: 16px !important;
-}
-
-article.nextra-body-typesetting-article h1 {
-  font-size: 3rem !important;
+article h1 {
+  font-size: 2.25rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.03em !important;
   line-height: 1.2 !important;
 }
-article.nextra-body-typesetting-article h2 {
-  font-size: 2rem !important;
+article h2 {
+  font-size: 1.5rem !important;
   font-weight: 600 !important;
   letter-spacing: -0.02em !important;
 }
-article.nextra-body-typesetting-article h3 {
-  font-size: 1.5rem !important;
+article h3 {
+  font-size: 1.25rem !important;
   font-weight: 600 !important;
 }
-article.nextra-body-typesetting-article h4 {
-  font-size: 1.25rem !important;
+article h4 {
+  font-size: 1.1rem !important;
   font-weight: 600 !important;
 }
 
