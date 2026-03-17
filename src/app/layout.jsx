@@ -2,11 +2,11 @@ import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import { GeistMono } from 'geist/font/mono'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-plus-jakarta',
+  variable: '--font-inter',
   display: 'swap',
 })
 import 'nextra-theme-docs/style.css'
@@ -39,7 +39,7 @@ export default async function RootLayout({ children }) {
   const pageMap = await getPageMap()
 
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning className={`${plusJakarta.variable} ${GeistMono.variable}`}>
+    <html lang="en" dir="ltr" suppressHydrationWarning className={`${inter.variable} ${GeistMono.variable}`}>
       <Head>
         <link rel="icon" type="image/svg+xml" href="/stratpoint_icon.svg" />
       </Head>
