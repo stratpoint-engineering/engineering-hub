@@ -99,7 +99,7 @@ html body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 20px !important;
+  font-size: 14px !important;
   line-height: 1.75 !important;
 }
 
@@ -169,7 +169,7 @@ aside,
 
 /* Sidebar font size */
 aside a, aside li, aside span, aside button {
-  font-size: 1rem !important;
+  font-size: 0.875rem !important;
 }
 
 aside [class*="x:font-semibold"] {
