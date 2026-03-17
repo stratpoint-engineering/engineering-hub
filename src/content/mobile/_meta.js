@@ -1,7 +1,6 @@
 export default {
   index: 'Overview',
-  'golden-path-native': 'Golden Path (React Native)',
-  'golden-path-flutter': 'Golden Path (Flutter)',
+  'golden-paths': 'Golden Paths',
   'best-practices': 'Best Practices',
   'code-review-checklist': 'Code Review Checklist',
   onboarding: 'Onboarding'

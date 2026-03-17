@@ -1,6 +1,7 @@
 export default {
   index: 'Overview',
-  'golden-path': 'Golden Path',
+  'golden-paths': 'Golden Paths',
   'best-practices': 'Best Practices',
-  onboarding: 'Onboarding'
+  'code-review-checklist': 'Code Review Checklist',
+  onboarding: 'Onboarding',
 }
