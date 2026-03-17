@@ -108,12 +108,15 @@ html body article p,
 html body article li,
 html body article ul,
 html body article ol,
-html body article td,
-html body article th,
-html body article blockquote,
-html body article span:not([class*="x:text-"]) {
+html body article blockquote {
   font-size: 1rem !important;
-  line-height: 1.75 !important;
+  line-height: 1.85 !important;
+  letter-spacing: 0.01em !important;
+  color: var(--text-primary) !important;
+}
+
+html body article p {
+  margin-bottom: 1.25em !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
