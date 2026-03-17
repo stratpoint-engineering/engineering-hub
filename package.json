@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build && npx pagefind --site out",
+    "build": "next build && npx pagefind --site out --output-path out/_pagefind",
     "start": "next start"
   },
   "dependencies": {
