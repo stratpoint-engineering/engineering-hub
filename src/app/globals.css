@@ -30,12 +30,12 @@
 ───────────────────────────────────────────── */
 :root {
   --bg-main:        #ffffff;
-  --bg-surface:     #ffffff;
-  --bg-subtle:      #f9fafb;
-  --border:         #e5e7eb;
-  --text-primary:   #111827;
-  --text-secondary: #374151;
-  --text-muted:     #9ca3af;
+  --bg-surface:     #f7f4f0;
+  --bg-subtle:      #f0ece6;
+  --border:         #e0dbd4;
+  --text-primary:   #111111;
+  --text-secondary: #333333;
+  --text-muted:     #777777;
   --accent:         #f97316;
   --accent-hover:   #ea6c00;
   --link:           #2563eb;
@@ -43,9 +43,9 @@
 
   --code-bg:        #f3f4f6;
   --code-text:      #b45309;
-  --code-border:    #e5e7eb;
+  --code-border:    #e0dbd4;
   --shiki-light-bg: #f3f4f6;
-  --shiki-light:    #111827;
+  --shiki-light:    #111111;
 
   --nextra-bg: 255 255 255;
 }
@@ -54,25 +54,25 @@
    DESIGN TOKENS — Dark
 ───────────────────────────────────────────── */
 .dark {
-  --bg-main:        #0d1117;
-  --bg-surface:     #161b22;
-  --bg-subtle:      #1c2128;
-  --border:         #30363d;
-  --text-primary:   #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted:     #484f58;
+  --bg-main:        #1e2030;
+  --bg-surface:     #252840;
+  --bg-subtle:      #2a2d45;
+  --border:         #383b54;
+  --text-primary:   #eef0fa;
+  --text-secondary: #b0b8d8;
+  --text-muted:     #6e78a0;
   --accent:         #f97316;
   --accent-hover:   #fb923c;
-  --link:           #58a6ff;
-  --link-hover:     #79c0ff;
+  --link:           #7aa2f7;
+  --link-hover:     #9bb5f8;
 
-  --code-bg:        #161b22;
+  --code-bg:        #252840;
   --code-text:      #ffa657;
-  --code-border:    #30363d;
-  --shiki-dark-bg:  #161b22;
-  --shiki-dark:     #e6edf3;
+  --code-border:    #383b54;
+  --shiki-dark-bg:  #252840;
+  --shiki-dark:     #c8cfe8;
 
-  --nextra-bg: 13 17 23;
+  --nextra-bg: 30 32 48;
 }
 
 /* ─────────────────────────────────────────────
@@ -80,7 +80,56 @@
 ───────────────────────────────────────────── */
 html {
   background-color: var(--bg-main);
+  color-scheme: light;
 }
+
+html.dark {
+  background-color: var(--bg-main);
+  color-scheme: dark;
+}
+
+/* ─────────────────────────────────────────────
+   NEXTRA HARDCODED COLOR OVERRIDES
+───────────────────────────────────────────── */
+
+/* Page wrapper backgrounds */
+.x\:bg-gray-100                        { background-color: var(--bg-main) !important; }
+.dark .x\:dark\:bg-neutral-900         { background-color: var(--bg-main) !important; }
+
+/* Navbar blur */
+.nextra-navbar-blur                     { background-color: var(--bg-main) !important; opacity: 0.9; }
+
+/* Article body text */
+.x\:text-slate-700                      { color: var(--text-secondary) !important; }
+.dark .x\:dark\:text-slate-200         { color: var(--text-secondary) !important; }
+
+/* Headings */
+.x\:text-slate-900                      { color: var(--text-primary) !important; }
+.dark .x\:dark\:text-slate-100         { color: var(--text-primary) !important; }
+
+/* Footer & muted text */
+.x\:text-gray-600                       { color: var(--text-muted) !important; }
+.dark .x\:dark\:text-gray-400          { color: var(--text-muted) !important; }
+
+/* Sidebar nav items */
+.x\:text-gray-600                       { color: var(--text-secondary) !important; }
+.dark .x\:dark\:text-neutral-400       { color: var(--text-secondary) !important; }
+
+/* Sidebar hover backgrounds */
+.x\:hover\:bg-gray-100:hover           { background-color: var(--bg-subtle) !important; }
+.dark .x\:dark\:hover\:bg-primary-100\/5:hover { background-color: var(--bg-subtle) !important; }
+
+/* Sidebar tree lines */
+.x\:before\:bg-gray-200::before        { background-color: var(--border) !important; }
+.dark .x\:dark\:before\:bg-neutral-800::before { background-color: var(--border) !important; }
+
+/* Table borders */
+.x\:border-gray-300                     { border-color: var(--border) !important; }
+.dark .x\:dark\:border-gray-600        { border-color: var(--border) !important; }
+
+/* Table row striping */
+.x\:even\:bg-gray-100:nth-child(even)  { background-color: var(--bg-subtle) !important; }
+.dark .x\:even\:dark\:bg-gray-600\/20:nth-child(even) { background-color: var(--bg-subtle) !important; }
 
 body,
 body * {
@@ -143,7 +192,7 @@ nav[class*="nextra"] {
 
 .dark header,
 .dark nav[class*="nextra"] {
-  background-color: rgba(13, 17, 23, 0.9) !important;
+  background-color: rgba(30, 32, 48, 0.9) !important;
   border-bottom: 1px solid var(--border) !important;
 }
 
