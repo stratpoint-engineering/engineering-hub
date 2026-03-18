@@ -2,106 +2,1015 @@
 title: Java Spring Boot
 ---
 
-import { Callout, Steps, FileTree, Tabs, Tab } from 'nextra/components'
+import { Callout, Steps, FileTree, Tabs } from 'nextra/components'
 
 # Java Spring Boot
 
-> **Stack:** Spring Boot 3 · Java 21 · Spring Data JPA · Maven
-
-<Callout type="warning">
-  This golden path is pending documentation by the Backend capability lead. Contribute via a pull request.
-</Callout>
+> **Stack:** Spring Boot 3 · Java 21 · Spring Data JPA · Spring Security · Maven
 
 ## Overview
 
-A brief description of this golden path — what it is, what problem it solves, and when to use it.
-
-_To be documented._
+The Java Spring Boot golden path is the standard for building enterprise-grade REST and event-driven microservices at Stratpoint. It provides a proven, opinionated structure covering layered architecture, design patterns, concurrency, security, and cloud-native resilience — all following Spring Boot 3 and Java 21 best practices.
 
 ## When to Use
 
 | ✅ Use this when | ❌ Avoid this when |
 |---|---|
-| _To be documented_ | _To be documented_ |
+| Building enterprise REST or event-driven microservices | Lightweight scripts or small serverless functions |
+| Java is the team's primary language | Team is primarily TypeScript or Python |
+| You need Spring Security, JPA, and AOP out of the box | Low-latency reactive pipelines (prefer Spring WebFlux or Quarkus) |
+| Cloud-native patterns are required (circuit breaker, saga, modular monolith) | Rapid prototype with minimal setup overhead |
 
 ## Tech Stack
 
 | Layer | Technology | Version |
 |---|---|---|
-| _To be documented_ | | |
+| Framework | Spring Boot | 3.x |
+| Language | Java | 21 |
+| ORM | Spring Data JPA / Hibernate | — |
+| Build Tool | Maven | 3.8+ |
+| Database | PostgreSQL | 14+ |
+| Schema Migration | Flyway or Liquibase | — |
+| Security | Spring Security | — |
+| Resilience | Resilience4j | — |
+| Observability | Spring Actuator · Micrometer · Zipkin | — |
+| Testing | JUnit 5 · Mockito · TestContainers | — |
+| Containerization | Docker | — |
+| Orchestration | Kubernetes (Kustomize) | — |
 
 ## Prerequisites
 
-- [ ] _To be documented_
-
-## Scaffolding
-
-How to bootstrap a new project using this golden path.
-
-```bash
-# To be documented
-```
+- [ ] Java 21 installed (via [SDKMAN](https://sdkman.io/) or Homebrew)
+- [ ] Maven 3.8+ installed
+- [ ] Docker Desktop installed and running
+- [ ] IntelliJ IDEA with Lombok plugin enabled
+- [ ] PostgreSQL client (e.g., DBeaver or `psql`)
 
 ## Project Structure
 
-```
-project-root/
-├── # To be documented
-```
+<FileTree>
+  <FileTree.Folder name=".github" defaultOpen>
+    <FileTree.Folder name="workflows" />
+    <FileTree.File name="PULL_REQUEST_TEMPLATE.md" />
+    <FileTree.Folder name="ISSUE_TEMPLATE" />
+  </FileTree.Folder>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.Folder name="main" defaultOpen>
+      <FileTree.Folder name="java/com/company/[app]" defaultOpen>
+        <FileTree.Folder name="config">
+          <FileTree.File name="SecurityConfig.java" />
+          <FileTree.File name="SwaggerConfig.java" />
+          <FileTree.File name="AppConfig.java" />
+        </FileTree.Folder>
+        <FileTree.Folder name="controller">
+          <FileTree.Folder name="v1" />
+          <FileTree.Folder name="advice" />
+        </FileTree.Folder>
+        <FileTree.Folder name="model">
+          <FileTree.Folder name="entity" />
+          <FileTree.Folder name="dto" />
+          <FileTree.Folder name="mapper" />
+        </FileTree.Folder>
+        <FileTree.Folder name="repository" />
+        <FileTree.Folder name="service">
+          <FileTree.Folder name="impl" />
+          <FileTree.Folder name="interfaces" />
+        </FileTree.Folder>
+        <FileTree.Folder name="exception" />
+        <FileTree.Folder name="security" />
+        <FileTree.Folder name="util" />
+      </FileTree.Folder>
+      <FileTree.Folder name="resources">
+        <FileTree.File name="application.yml" />
+        <FileTree.File name="application-dev.yml" />
+        <FileTree.File name="application-test.yml" />
+        <FileTree.File name="application-prod.yml" />
+        <FileTree.Folder name="db">
+          <FileTree.Folder name="migration" />
+        </FileTree.Folder>
+        <FileTree.Folder name="static" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="test">
+      <FileTree.Folder name="java/com/company/[app]">
+        <FileTree.Folder name="controller" />
+        <FileTree.Folder name="service" />
+        <FileTree.Folder name="repository" />
+        <FileTree.Folder name="integration" />
+      </FileTree.Folder>
+      <FileTree.Folder name="resources">
+        <FileTree.File name="application-test.yml" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="docs">
+    <FileTree.Folder name="architecture" />
+    <FileTree.Folder name="api" />
+    <FileTree.Folder name="operations" />
+  </FileTree.Folder>
+  <FileTree.Folder name="k8s">
+    <FileTree.Folder name="base">
+      <FileTree.File name="deployment.yaml" />
+      <FileTree.File name="service.yaml" />
+      <FileTree.File name="kustomization.yaml" />
+    </FileTree.Folder>
+    <FileTree.Folder name="overlays">
+      <FileTree.Folder name="dev" />
+      <FileTree.Folder name="staging" />
+      <FileTree.Folder name="prod" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.File name=".editorconfig" />
+  <FileTree.File name=".gitignore" />
+  <FileTree.File name="Dockerfile" />
+  <FileTree.File name="docker-compose.yml" />
+  <FileTree.File name="pom.xml" />
+  <FileTree.File name="README.md" />
+</FileTree>
 
 ## Local Development
 
-### Setup
-
-_To be documented._
-
 ### Environment Variables
 
-```bash
-# .env.example
-# To be documented
+```yaml
+# application-dev.yml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appdb
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  profiles:
+    active: dev
+
+logging:
+  level:
+    root: INFO
+    com.company.app: DEBUG
+  pattern:
+    console: '{"timestamp":"%d","level":"%p","traceId":"%X{traceId}","message":"%m"}%n'
 ```
 
 ### Running Locally
 
-```bash
-# To be documented
+<Tabs items={['Docker Compose', 'Maven']}>
+  <Tabs.Tab>
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/appdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - db
+    volumes:
+      - ./logs:/app/logs
+
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
 ```
+
+```bash
+docker compose up
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```bash
+# Start the database first
+docker compose up db -d
+
+# Run the application
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+  </Tabs.Tab>
+</Tabs>
 
 ## Conventions
 
 ### Naming
 
-_To be documented._
+| Target | Convention | Example |
+|---|---|---|
+| Classes | PascalCase | `UserService` |
+| Methods / Variables | camelCase | `getUserById` |
+| Constants | UPPER_SNAKE_CASE | `MAX_RETRY_COUNT` |
+| Packages | lowercase with dots | `com.company.module` |
+| Repositories | Suffix `Repository` | `UserRepository` |
+| Services | Suffix `Service` | `UserService` |
+| Controllers | Suffix `Controller` | `UserController` |
 
 ### Patterns
 
-_To be documented._
+The codebase is organized into four strict layers. Each layer communicates only with the layer directly below it and uses the correct data type at each boundary.
+
+1. **Controller Layer** — Handles HTTP requests/responses, input validation, and delegates to services. Uses DTOs. Contains no business logic. Uses `@ControllerAdvice` for centralized error handling.
+2. **Service Layer** — Implements business logic and transaction management. Receives DTOs from controllers, works with Entities internally, returns DTOs to controllers.
+3. **Repository Layer** — Data access via Spring Data JPA. Custom JPQL queries where needed. Returns Entities to the service layer.
+4. **Model Layer** — JPA Entities for database mapping, DTOs for API request/response, Records for cross-service payloads, Mappers to convert between Entities and DTOs.
 
 ### Code Style
 
-_To be documented._
+- Use Lombok (`@RequiredArgsConstructor`, `@Getter`, `@Builder`) to reduce boilerplate
+- Use constructor injection exclusively — never `@Autowired` on fields
+- Inject services via their interface type, not the concrete implementation
+- Use `@ControllerAdvice` + `@ExceptionHandler` for all error responses
+- Use structured JSON logging with SLF4J + Logback
+
+## Architectural Patterns
+
+### Dependency Injection (DI)
+
+**Goal:** Ensure loose coupling and testability through constructor-based dependency management.
+
+**Best Practice:** Use constructor injection to guarantee immutability, thread-safety, and eliminate null-states. Use `@RequiredArgsConstructor` from Lombok to avoid manual constructor boilerplate.
+
+```java
+@Service("myService")
+public class MyServiceImpl implements MyService {
+    private final MyComponent myAction;
+    private final MyComponent myApproach;
+
+    public MyServiceImpl(
+        @Qualifier("myAction") MyComponent myAction,
+        @Qualifier("myApproach") MyComponent myApproach
+    ) {
+        this.myAction = myAction;
+        this.myApproach = myApproach;
+    }
+
+    public String testMe() {
+        return myAction.doIt() + " " + myApproach.doIt();
+    }
+}
+
+@Component("myAction")
+public class MyActionImpl implements MyComponent {
+    public String doIt() {
+        return "I'm ready for best practices!";
+    }
+}
+
+@Component("myApproach")
+public class MyApproachImpl implements MyComponent {
+    public String doIt() {
+        return "Constructor Injection!";
+    }
+}
+```
+
+---
+
+### Proxy Pattern (AOP)
+
+**Goal:** Abstract cross-cutting concerns (transactions, async, security checks) without polluting business logic.
+
+**Best Practice:** Use Spring AOP to implement cross-cutting concerns like `@Transactional`, logging, and security checks via custom annotations. This reduces redundant validation in business logic implementations.
+
+```java
+// Custom Annotation
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CheckUserSession {
+    String requiredRole() default "USER";
+}
+
+// Aspect
+@Aspect
+@Component
+public class SessionProxyAspect {
+    private final HttpServletRequest request;
+    private final RedisService redisService;
+
+    public SessionProxyAspect(
+        @Autowired HttpServletRequest request,
+        @Qualifier("redisService") RedisService redisService
+    ) {
+        this.request = request;
+        this.redisService = redisService;
+    }
+
+    @Around("@annotation(checkSession)")
+    public Object validateSession(ProceedingJoinPoint joinPoint, CheckUserSession checkSession) throws Throwable {
+        String sessionId = request.getHeader("X-Session-ID");
+        String currentRole = redisService.getSessionRole(sessionId);
+        if (currentRole == null || !currentRole.equals(checkSession.requiredRole())) {
+            throw new UnauthorizedAccessException("Required role: " + checkSession.requiredRole());
+        }
+        return joinPoint.proceed();
+    }
+}
+
+@Service
+public class SensitiveDataService {
+    @CheckUserSession(requiredRole = "ADMIN")
+    public Data getFinancialReports() {
+        // Business logic only — no session checks needed here
+        return repository.fetchSecretData();
+    }
+}
+```
+
+<Callout type="warning">
+  **Self-invocation bypass:** `@Transactional` and `@Async` only work when called from a *different* bean. Calling an annotated method from within the same class bypasses the proxy entirely.
+</Callout>
+
+---
+
+### Factory Pattern
+
+**Goal:** Centralize complex object creation while hiding implementation details from the caller.
+
+**Best Practice:** Leverage Spring-managed beans as factory implementations. Use a `Map<String, ServiceInterface>` injected via the constructor to replace `if/else` or `switch` blocks. Since Spring beans are singleton-scoped by default, this ensures low memory utilization.
+
+```java
+public interface NotificationProvider {
+    void send(String recipient, String message);
+}
+
+@Service("SMS")
+public class SmsNotificationService implements NotificationProvider {
+    @Override public void send(String r, String m) { /* ... */ }
+}
+
+@Service("EMAIL")
+public class EmailNotificationService implements NotificationProvider {
+    @Override public void send(String r, String m) { /* ... */ }
+}
+
+@Service("PUSH")
+public class PushNotificationService implements NotificationProvider {
+    @Override public void send(String r, String m) { /* ... */ }
+}
+
+@Service("notificationServiceFactory")
+public class NotificationFactory {
+    // Spring DI automatically maps all classes implementing NotificationProvider
+    private final Map<String, NotificationProvider> providers;
+
+    public NotificationFactory(Map<String, NotificationProvider> providers) {
+        this.providers = providers;
+    }
+
+    public void notify(String type, String recipient, String message) {
+        NotificationProvider provider = providers.get(type.toUpperCase());
+        if (provider == null) {
+            throw new UnsupportedOperationException("No provider found for: " + type);
+        }
+        provider.send(recipient, message);
+    }
+}
+```
+
+---
+
+### Observer Pattern
+
+**Goal:** Maintain loose coupling between primary business logic and secondary side-effects.
+
+**Best Practice:**
+
+- Use **Java Records** for all event payloads (thread-safe, immutable)
+- Configure a **Virtual Thread Task Executor** for `@Async` scalability
+- Enable `@EnableAsync` and `@EnableTransactionManagement` explicitly
+
+```java
+@Configuration
+@EnableAsync
+@EnableTransactionManagement
+public class AsyncEventConfig {
+    @Bean
+    public Executor taskExecutor() {
+        return Executors.newVirtualThreadPerTaskExecutor();
+    }
+}
+
+// Event payload as a Record (immutable, thread-safe)
+public record UserRegistrationEvent(
+    Long userId,
+    String email,
+    String status,
+    LocalDateTime timestamp
+) {}
+```
+
+**Observers:**
+- `@TransactionalEventListener(phase = AFTER_COMMIT)` for external side-effects (email, SMS) — fires only after DB commit
+- `@EventListener` for internal auditing and metrics — fires immediately
+- `@Async` on all listeners to maximize throughput
+
+```java
+@Component
+@Slf4j
+public class UserObserver {
+
+    @Async
+    @EventListener(condition = "#event.status == 'PENDING'")
+    public void logAuditAttempt(UserRegistrationEvent event) {
+        log.info("[AUDIT] Registration attempt for User ID: {}", event.userId());
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void sendWelcomeEmail(UserRegistrationEvent event) {
+        log.info("[EXTERNAL] Sending Welcome Email to {}...", event.email());
+        // Call Email Service / SMTP
+    }
+}
+```
+
+**Publishers:**
+- Use `@Transactional` for state-changing operations (e.g., DB insertions)
+- Never perform slow I/O inside a `@Transactional` method
+- Never use `@Transactional` for read-only operations
+
+```java
+@Service
+@RequiredArgsConstructor
+public class RegistrationService {
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserRepository userRepository;
+
+    @Transactional
+    public void registerNewUser(String email) {
+        User user = userRepository.save(new User(email, "PENDING"));
+        eventPublisher.publishEvent(new UserRegistrationEvent(
+            user.getId(), email, user.getStatus(), LocalDateTime.now()
+        ));
+    }
+}
+```
+
+---
+
+### Builder Pattern
+
+**Goal:** Facilitate creation of valid, immutable-first DTOs with strict guardrails.
+
+**Best Practice:**
+- Use `@AllArgsConstructor(access = AccessLevel.PRIVATE)` to force the builder
+- Use `@NoArgsConstructor(access = AccessLevel.PROTECTED)` for JPA/Jackson reflection
+- Override `.build()` to run validation before returning the object
+- Use `@Setter(AccessLevel.PROTECTED)` for attributes that need post-creation mutation
+
+```java
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
+@JsonDeserialize(builder = UserAccountDTO.UserAccountDTOBuilder.class)
+@ValidUserAccount
+public class UserAccountDTO {
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
+
+    @NotBlank(message = "Mobile number is required")
+    @Pattern(
+        regexp = "^(\\+63-9|09)\\d{9}$",
+        message = "Mobile must follow +63-9XXXXXXXXX or 09XXXXXXXXX format"
+    )
+    private String mobileNumber;
+
+    @Setter(AccessLevel.PROTECTED)
+    @Builder.Default
+    private String status = "INACTIVE";
+
+    // Self-validation on build
+    public static class UserAccountDTOBuilder {
+        public UserAccountDTO build() {
+            UserAccountDTO dto = new UserAccountDTO(email, mobileNumber, status);
+            ValidationUtils.validate(dto);
+            return dto;
+        }
+    }
+}
+```
+
+**Shared validator utility:**
+
+```java
+public class ValidationUtils {
+    private static final Validator VALIDATOR =
+        Validation.buildDefaultValidatorFactory().getValidator();
+
+    public static <T> void validate(T object) {
+        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(object);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+}
+```
+
+## Concurrency
+
+### Virtual Thread Concurrency (Java 21)
+
+**Goal:** Improve throughput for I/O-bound workloads (DB calls, external API calls, file reads) without the overhead of platform thread pools.
+
+**Best Practice:** Use `Executors.newVirtualThreadPerTaskExecutor()` or configure Spring's task executor via `application.yml`.
+
+```java
+ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+executor.submit(() -> System.out.println("Task running in virtual thread"));
+executor.shutdown();
+```
+
+```yaml
+# application.yml
+spring:
+  task:
+    execution:
+      type: virtual
+      pool:
+        keep-alive: 60s
+        max-size: 1000
+```
+
+---
+
+### Structured Concurrency (Java 21)
+
+**Goal:** Treat a group of related concurrent tasks as a single unit of work. If one subtask fails, all others are automatically cancelled — no orphan threads.
+
+**Best Practice:**
+- Use `ShutdownOnSuccess` when only one result is needed
+- Use `ShutdownOnFailure` when all results are required
+
+```java
+public Response getProfile(String id) throws ExecutionException, InterruptedException {
+    try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        Subtask<User> user = scope.fork(() -> fetchUser(id));
+        Subtask<Order> order = scope.fork(() -> fetchLatestOrder(id));
+
+        scope.join();
+        scope.throwIfFailed();
+
+        return new Response(user.get(), order.get());
+    }
+}
+```
+
+---
+
+### Circuit Breaker Pattern (Resilience4j)
+
+**Goal:** Prevent cascading failures across microservices by detecting and isolating failing dependencies.
+
+**Best Practice:**
+- Use `COUNT_BASED` for low-traffic services, `TIME_BASED` for high-traffic
+- Only trip the circuit on infrastructure errors — never on business validation errors
+
+```yaml
+# application.yml
+resilience4j:
+  circuitbreaker:
+    instances:
+      externalOrderService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000ms
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+```
+
+```java
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+    private final ExternalApiClient apiClient;
+
+    @CircuitBreaker(name = "externalOrderService", fallbackMethod = "handleApiFailure")
+    public OrderResponse processOrder(OrderRequest request) {
+        return apiClient.submit(request);
+    }
+
+    private OrderResponse handleApiFailure(OrderRequest request, Throwable t) {
+        log.error("Circuit Breaker triggered. Reason: {}", t.getMessage());
+        return OrderResponse.builder()
+            .status("QUEUED_LOCAL")
+            .message("Provider is down; order cached for retry.")
+            .build();
+    }
+}
+```
+
+## Enterprise / Cloud-Native Patterns
+
+| Pattern | Tool | Purpose |
+|---|---|---|
+| **API Gateway** | Spring Cloud Gateway | Manage, route, and secure requests in a microservices environment |
+| **Saga** | Custom / Choreography | Manage distributed transactions across services for eventual consistency |
+| **Modular Monolith** | Spring Modulith | Single deployable unit with strictly enforced module boundaries |
+
+## Database
+
+### JPA / Hibernate Configuration
+
+- Use `LAZY` fetch type by default — only fetch eagerly when strictly necessary
+- Configure HikariCP connection pooling with appropriate pool sizes
+- Set query timeout values to prevent long-running queries
+
+### Schema Management
+
+- Use **Flyway** or **Liquibase** for all schema migrations
+- Version every schema change with a sequential migration file
+- Always include a rollback script for destructive changes
+
+### Performance Optimization
+
+- Add indexes for columns used in `WHERE`, `JOIN`, and `ORDER BY` clauses
+- Implement pagination for all list endpoints (`Pageable`)
+- Use query projections (interfaces or DTOs) instead of full entity fetches where only a subset of fields is needed
+- Use query caching where appropriate
 
 ## Testing
 
-| Type | Tool | Coverage Target |
+### Coverage Targets
+
+| Layer | Minimum Coverage |
+|---|---|
+| Overall | 80% |
+| Service Layer | 90% |
+| Critical Business Logic | 100% |
+
+### Test Types
+
+| Type | Tool | Notes |
 |---|---|---|
-| Unit | _TBD_ | _TBD_ |
-| Integration | _TBD_ | _TBD_ |
-| E2E | _TBD_ | _TBD_ |
+| Unit | JUnit 5 + Mockito | Test positive and negative scenarios; use parameterized tests for boundaries |
+| Integration | `@SpringBootTest` + TestContainers | Real database; clean up test data after each test |
+| API / Controller | MockMvc or RestAssured | Test all endpoints, verify response structure and status codes |
+| E2E | Custom integration suite | Critical user flows only |
 
 ## CI/CD
 
-_To be documented._
+```yaml
+# .github/workflows/ci.yml
+name: Java Spring Boot CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Code quality checks
+        run: mvn checkstyle:check pmd:check spotbugs:check
+
+      - name: Dependency vulnerability check
+        run: mvn dependency-check:check
+
+      - name: Unit tests
+        run: mvn test
+
+      - name: Test coverage report
+        run: mvn jacoco:report
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+
+  build:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and integration tests
+        run: mvn verify
+
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+
+      - name: Container security scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'myapp:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Set Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy to environment
+        run: |
+          cd k8s/overlays/${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
+          kustomize build | kubectl apply -f -
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/myapp -n ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+```
 
 ## Observability
 
-_To be documented._
+### Metrics
+
+Use **Spring Boot Actuator** with **Micrometer** to expose metrics for Prometheus:
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+```
+
+Track key business metrics, API response times, and database operation times via Micrometer counters and timers.
+
+### Distributed Tracing
+
+Use **Spring Cloud Sleuth** with **Zipkin** to trace requests across services. Include correlation IDs in all log entries.
+
+### Logging Strategy
+
+| Environment | Log Level | Format |
+|---|---|---|
+| `dev` | DEBUG | Human-readable |
+| `test` | INFO | Structured JSON |
+| `staging` | INFO | Structured JSON |
+| `prod` | WARN / ERROR | Structured JSON |
+
+- Use **SLF4J + Logback** with JSON output in non-dev environments
+- Include `traceId`, `spanId`, and correlation IDs in every log entry
+- Log start/end of significant operations and all exceptions with stack traces (non-prod only)
+- Never log sensitive data (PII, credentials, tokens)
 
 ## Security
 
-_To be documented._
+### Authentication
+
+- Use **JWT-based authentication** with Spring Security
+- Implement token-based session management with refresh token rotation
+- Encode passwords with **BCrypt**
+- Add account lockout after repeated failed attempts
+
+### Authorization
+
+- Define clear roles (`USER`, `ADMIN`) and use `@PreAuthorize` for method-level security
+- Implement fine-grained permissions via Spring Security's expression-based access control
+- Use HTTPS for all endpoints
+- Configure CORS explicitly — never use wildcard `*` in production
+- Add rate limiting and security headers (CSRF, XSS protection)
+
+### Data Protection
+
+- Encrypt sensitive data at rest using attribute-level encryption where needed
+- Implement proper key management (AWS KMS, HashiCorp Vault)
+- Validate all input using Bean Validation (JSR-380) and custom validators
+- Never log sensitive fields (passwords, tokens, card numbers)
+
+## Containerization
+
+<Tabs items={['Dockerfile', 'docker-compose.yml']}>
+  <Tabs.Tab>
+```dockerfile
+# Multi-stage build for optimized image size
+FROM maven:3.8.5-openjdk-21-slim AS build
+WORKDIR /app
+COPY pom.xml .
+# Download dependencies separately for better layer caching
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+# Runtime image
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+# Add non-root user
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+# Copy built artifact from build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Configure health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget -q --spider http://localhost:8080/actuator/health || exit 1
+
+# Run with container-aware JVM options
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/appdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - db
+    volumes:
+      - ./logs:/app/logs
+
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+  </Tabs.Tab>
+</Tabs>
+
+## AI-Assisted Development
+
+### Claude Code
+
+**Recommended uses:**
+- Scaffolding controllers, services, repositories, and DTOs following the layer structure above
+- Generating boilerplate (Lombok DTOs, JUnit 5 tests, Flyway migration scripts, CI/CD pipelines)
+- Explaining AOP proxy behavior, structured concurrency, and circuit breaker configuration
+- Drafting unit and integration tests with JUnit 5, Mockito, and TestContainers
+- Code review — ask Claude to check against the Implementation Checklist in the [Code Review Checklist](/backend/code-review-checklist)
+
+**CLAUDE.md setup:**
+
+```markdown
+# CLAUDE.md
+
+## Stack
+Java 21 · Spring Boot 3 · Spring Data JPA · Maven
+
+## Project Structure
+Layered architecture: controller → service (interface + impl) → repository → model (entity/dto/mapper)
+Packages: config, controller/v1, model/entity, model/dto, model/mapper, repository,
+          service, service/impl, exception, security, util
+
+## Key Conventions
+- PascalCase for classes, camelCase for methods/variables, UPPER_SNAKE_CASE for constants
+- Suffix classes: UserRepository, UserService, UserController
+- Constructor injection only — never @Autowired on fields
+- Inject services via their interface type, not the concrete impl
+
+## What to follow
+- Use @RequiredArgsConstructor for constructor injection
+- Use Java Records for event payloads (Observer pattern)
+- Use @TransactionalEventListener(phase = AFTER_COMMIT) for external side-effects
+- Use Executors.newVirtualThreadPerTaskExecutor() for @Async task executors
+- Use @Builder with @AllArgsConstructor(access = PRIVATE) for DTOs
+- Validate DTOs via ValidationUtils.validate() in the builder's build() method
+
+## What to avoid
+- Field injection with @Autowired
+- @Transactional on read-only operations
+- Slow I/O inside @Transactional methods
+- Public setters on DTOs — use .toBuilder() instead
+- Static factory methods that bypass the Spring Application Context
+- Sharing a circuit breaker instance across different external APIs
+```
+
+**Guardrails:**
+- Do not let Claude generate Spring Security configuration without manual review
+- Always review AI-generated JPQL / native SQL queries before merging
+- Do not share production secrets, PII, or proprietary data in prompts
+
+---
+
+### Cursor
+
+**Recommended uses:**
+- Inline generation of controller endpoints, service methods, and repository queries
+- Refactoring field injection to constructor injection across the codebase
+- Asking `@codebase` questions about service dependencies and data flow
+- Generating parameterized JUnit 5 tests for boundary conditions
+
+**`.cursor/rules` setup:**
+
+```
+## Role
+You are a Java Spring Boot engineer on an enterprise Spring Boot 3 / Java 21 project at Stratpoint.
+
+## Standards to follow
+- Always use constructor injection. Never @Autowired on fields.
+- Use @RequiredArgsConstructor (Lombok) to reduce boilerplate.
+- Services must implement an interface; inject via the interface type.
+- Use Java Records for event payloads. Use @Builder with private constructors for DTOs.
+- Use @TransactionalEventListener(phase = AFTER_COMMIT) for external side-effects.
+- Use Executors.newVirtualThreadPerTaskExecutor() for all @Async task executors.
+- Never place slow I/O inside a @Transactional method.
+
+## Code style
+- PascalCase for classes, camelCase for methods/variables, UPPER_SNAKE_CASE for constants
+- Suffix: UserRepository, UserService, UserController, UserMapper
+
+## Always
+- Write JUnit 5 tests alongside any new service or controller
+- Validate DTOs using Bean Validation + custom validators
+- Use structured JSON logging with SLF4J + Logback and include correlation IDs
+
+## Never
+- Use field injection (@Autowired on private fields)
+- Use @Transactional on read-only service methods
+- Hardcode secrets — use Spring profiles and environment variables
+- Skip input validation at controller or service entry points
+```
+
+**Guardrails:**
+- Review all AI-suggested `pom.xml` dependency additions before accepting
+- Do not use AI-generated Spring Security configuration without a dedicated review pass
+- Treat suggestions as a first draft — validate against the [Code Review Checklist](/backend/code-review-checklist)
 
 ## References
 
-- _To be documented_
+### Official Documentation
+
+- [Spring Boot Reference Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+- [Spring Framework Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/)
+- [Spring Security Reference](https://docs.spring.io/spring-security/reference/)
+- [Spring Data JPA Reference](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
+- [Java 21 Release Notes](https://openjdk.org/projects/jdk/21/)
+- [Resilience4j Documentation](https://resilience4j.readme.io/docs)
+- [Lombok Documentation](https://projectlombok.org/features/)
+- [TestContainers for Java](https://java.testcontainers.org/)
+
+### Internal Resources
+
+- [Backend Best Practices](/backend/best-practices)
+- [Backend Code Review Checklist](/backend/code-review-checklist)
+- [Stratpoint Engineering Principles](/engineering-principles)
+
+### Further Reading
+
+- [Effective Java, 3rd Edition — Joshua Bloch](https://www.oreilly.com/library/view/effective-java/9780134686097/)
+- [Virtual Threads — Project Loom (JEP 444)](https://openjdk.org/jeps/444)
+- [Structured Concurrency (JEP 453)](https://openjdk.org/jeps/453)
+- [OWASP Java Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Java_Security_Cheat_Sheet.html)

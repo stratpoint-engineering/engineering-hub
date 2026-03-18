@@ -75,7 +75,7 @@ Pull these sections from the source document:
 title: [Display Name]
 ---
 
-import { Callout, Steps, FileTree, Tabs, Tab } from 'nextra/components'
+import { Callout, Steps, FileTree, Tabs } from 'nextra/components'
 
 # [Display Name]
 

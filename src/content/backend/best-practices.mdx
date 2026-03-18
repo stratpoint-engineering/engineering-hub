@@ -4,28 +4,129 @@ title: Best Practices
 
 import { Callout } from 'nextra/components'
 
-# Best Practices
+# Backend Best Practices
 
-<Callout type="warning">
-  This page is pending documentation by the Backend capability lead. Contribute via a pull request.
-</Callout>
+Patterns and conventions for building reliable, secure, and maintainable backend services at Stratpoint. These practices apply across all backend stacks — framework-specific guidance lives in each [Golden Path](/backend/golden-paths).
 
-## Overview
+## API Design
 
-_To be documented._
+### URL Structure
 
-## Code Quality
+- Use plural nouns for resources — `/api/v1/users`
+- Use resource IDs for specific items — `/api/v1/users/{id}`
+- Use sub-resources for related entities — `/api/v1/users/{id}/orders`
+- Use query parameters for filtering, sorting, and pagination — `/api/v1/users?status=active&sort=lastName&page=0&size=20`
+- Version all APIs — `/api/v1/...`
 
-_To be documented._
+### HTTP Methods
 
-## Performance
+| Method | Purpose |
+|---|---|
+| `GET` | Retrieve resources (no side effects) |
+| `POST` | Create a new resource |
+| `PUT` | Full update of an existing resource |
+| `PATCH` | Partial update of an existing resource |
+| `DELETE` | Remove a resource |
 
-_To be documented._
+### Status Codes
+
+| Code | Meaning |
+|---|---|
+| `200 OK` | Successful request |
+| `201 Created` | Resource created successfully |
+| `204 No Content` | Successful request with no response body |
+| `400 Bad Request` | Invalid request parameters |
+| `401 Unauthorized` | Authentication required |
+| `403 Forbidden` | Authenticated but not authorized |
+| `404 Not Found` | Resource not found |
+| `409 Conflict` | Request conflicts with current state |
+| `500 Internal Server Error` | Unexpected server error |
+
+### Response Format
+
+All API responses must follow a consistent envelope:
+
+```json
+{
+  "status": "success",
+  "data": {},
+  "meta": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "pagination": {
+      "page": 1,
+      "size": 10,
+      "totalElements": 100,
+      "totalPages": 10
+    }
+  }
+}
+```
+
+Error responses:
+
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "USER_NOT_FOUND",
+    "message": "User with ID 123 not found",
+    "details": [
+      {
+        "field": "id",
+        "message": "No user exists with the provided ID"
+      }
+    ]
+  },
+  "meta": {
+    "timestamp": "2024-01-01T12:00:00Z",
+    "traceId": "abc-123-xyz"
+  }
+}
+```
 
 ## Security
 
-_To be documented._
+### Authentication & Authorization
+
+- Use JWT-based authentication with short-lived access tokens and refresh token rotation
+- Enforce role-based access control (RBAC) — define the minimum set of roles needed
+- Use method-level authorization checks (e.g., `@PreAuthorize`) for fine-grained control
+- Implement account lockout after repeated failed login attempts
+
+### API Security
+
+- Use HTTPS for all endpoints — no plain HTTP in staging or production
+- Configure CORS explicitly — never use wildcard `*` in production
+- Add rate limiting on all public-facing endpoints
+- Include security headers: CSRF protection, XSS protection, `Content-Security-Policy`
+
+### Data Protection
+
+- Encrypt sensitive data at rest
+- Use a secrets manager (AWS Secrets Manager, HashiCorp Vault) — never hardcode credentials
+- Validate all input at every entry point using schema/type validation
+- Never log PII, credentials, tokens, or card data
+
+## Performance
+
+- Paginate all list endpoints — never return unbounded result sets
+- Use lazy loading by default for ORM relationships
+- Implement caching for frequently read, rarely changed data
+- Use connection pooling for all database connections
+- Set timeouts on all outbound HTTP calls and database queries
+- Use async processing for operations that don't need to block the response (e.g., sending emails, publishing events)
+
+## Observability
+
+- Use structured JSON logging in all non-dev environments
+- Include `traceId` and `correlationId` in every log entry
+- Expose health check and metrics endpoints (e.g., `/actuator/health`, `/metrics`)
+- Track key business metrics (e.g., orders created, payments processed) alongside technical metrics
+- Implement distributed tracing for all inter-service calls
 
 ## References
 
-- _To be documented_
+- [Backend Golden Paths](/backend/golden-paths)
+- [Backend Code Review Checklist](/backend/code-review-checklist)
+- [Stratpoint Engineering Principles](/engineering-principles)
+- [OWASP REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)

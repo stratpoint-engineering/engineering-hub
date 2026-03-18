@@ -4,28 +4,127 @@ title: Code Review Checklist
 
 import { Callout } from 'nextra/components'
 
-# Code Review Checklist
+# Backend Code Review Checklist
 
-<Callout type="warning">
-  This page is pending documentation by the Backend capability lead. Contribute via a pull request.
-</Callout>
+Universal checklist for all backend PRs at Stratpoint. Stack-specific pattern checklists are in the **[Stack Specifics](#java-spring-boot-specifics)** section below.
 
 ## General
 
-- [ ] _To be documented_
+- [ ] Project structure follows the stack's golden path
+- [ ] Naming conventions are applied consistently (classes, methods, files, packages)
+- [ ] No secrets, tokens, or credentials committed to source control
+- [ ] Logging is structured and includes correlation / trace IDs
+- [ ] API responses follow the standard envelope format (`status`, `data`, `meta`)
+- [ ] All new endpoints are versioned under `/api/v1/...`
+- [ ] Error responses include a machine-readable `code` and human-readable `message`
 
 ## Code Quality
 
-- [ ] _To be documented_
+- [ ] No unused imports, variables, or dead code
+- [ ] Business logic lives in the service layer — not in controllers or repositories
+- [ ] No magic numbers or hardcoded strings — use named constants
+- [ ] Complex logic has inline comments explaining the *why*, not the *what*
+- [ ] No overly deep nesting — extract methods or use early returns
 
 ## Security
 
-- [ ] _To be documented_
+- [ ] Input validation is enforced at all entry points
+- [ ] Authentication and authorization checks are in place for all protected endpoints
+- [ ] No PII, passwords, or tokens are logged
+- [ ] Dependencies have been scanned for known vulnerabilities
+- [ ] CORS is configured explicitly — no wildcard `*` in production configs
+- [ ] Rate limiting is applied to public-facing endpoints
 
 ## Performance
 
-- [ ] _To be documented_
+- [ ] All list endpoints are paginated
+- [ ] ORM relationships use `LAZY` fetch by default
+- [ ] No N+1 query issues introduced
+- [ ] Outbound HTTP calls and DB queries have configured timeouts
+- [ ] Long-running operations are handled asynchronously
 
 ## Testing
 
-- [ ] _To be documented_
+- [ ] Unit tests cover the service layer at ≥ 90%
+- [ ] Integration tests use real dependencies (TestContainers, not mocks for DB)
+- [ ] Both positive and negative test scenarios are covered
+- [ ] New endpoints have controller/API tests verifying response structure and status codes
+- [ ] CI pipeline enforces coverage thresholds and fails on regressions
+
+## CI/CD
+
+- [ ] Pipeline runs lint, tests, and security scans on every PR
+- [ ] Container image is scanned before deployment (Trivy or equivalent)
+- [ ] Deployments are gated on a fully passing pipeline
+- [ ] No manual steps required for deployment to staging
+
+---
+
+## Java Spring Boot Specifics
+
+<Callout type="info">
+  These checklist items apply specifically to PRs in Java Spring Boot projects. See the [Java Spring Boot Golden Path](/backend/golden-paths/java-springboot) for full context on each pattern.
+</Callout>
+
+### Dependency Injection
+
+**Goal:** Ensure loose coupling and testability through constructor-based orchestration.
+
+- [ ] **ENFORCE: Constructor Injection.** All dependencies are `final` and injected via constructor (`@RequiredArgsConstructor` or manual constructor)
+- [ ] **FORBID: Field Injection.** No `@Autowired` on private fields
+- [ ] **MANDATE: Interface-Based Injection.** Services are injected via their `interface` type, not the concrete `impl`
+
+### Proxy Pattern (AOP)
+
+**Goal:** Abstract cross-cutting concerns without polluting business logic.
+
+- [ ] **ENFORCE: Method Visibility.** Intercepted methods (`@Transactional`, `@Async`) are `public` — proxies cannot intercept `private` or `protected` calls
+- [ ] **FORBID: Self-Invocation.** `@Transactional` or `@Async` methods are never called from within the same bean
+- [ ] **MANDATE: Virtual Threads for `@Async`.** The `TaskExecutor` bean uses `Executors.newVirtualThreadPerTaskExecutor()`
+
+### Factory Pattern
+
+**Goal:** Centralize object creation and eliminate `if/else` dispatch logic.
+
+- [ ] **ENFORCE: Strategy Map.** A `Map<String, ServiceInterface>` injected via constructor replaces any `if/else` or `switch` on type
+- [ ] **MANDATE: Bean Naming.** Implementation beans are named consistently for factory lookup (e.g., `"EMAIL"`, `"SMS"`, `"PUSH"`)
+- [ ] **FORBID: Static Factories.** No `static` factory methods that bypass the Spring Application Context
+
+### Observer Pattern
+
+**Goal:** Maintain loose coupling between business logic and secondary side-effects.
+
+- [ ] **ENFORCE: Immutable Payloads.** All event data uses **Java Records** for thread safety across Virtual Threads
+- [ ] **MANDATE: Transactional Awareness.** External side-effects (email, SMS, webhooks) use `@TransactionalEventListener(phase = AFTER_COMMIT)`
+- [ ] **ENFORCE: Fallback Protection.** Reliable observers have `fallbackExecution = false` to prevent ghost notifications
+
+### Builder Pattern
+
+**Goal:** Ensure DTOs are created in a valid, immutable-first state.
+
+- [ ] **ENFORCE: Private Constructors.** `@AllArgsConstructor(access = AccessLevel.PRIVATE)` forces use of the builder
+- [ ] **MANDATE: Framework Access.** `@NoArgsConstructor(access = AccessLevel.PROTECTED)` allows JPA/Jackson reflection
+- [ ] **ENFORCE: Self-Validation.** The `.build()` method calls `ValidationUtils.validate(dto)` before returning
+- [ ] **FORBID: Public Setters.** No `public` setters on DTOs — use `.toBuilder()` for post-creation mutation
+
+### Circuit Breaker Pattern
+
+**Goal:** Prevent cascading failures through intelligent state-based traffic control.
+
+- [ ] **ENFORCE: Fallback Methods.** Every `@CircuitBreaker` has a corresponding fallback providing graceful degradation
+- [ ] **MANDATE: Exception Filtering.** Business exceptions (e.g., `ValidationException`) are explicitly excluded from tripping the breaker
+- [ ] **FORBID: Shared Configurations.** No single circuit breaker instance shared across different external APIs
+- [ ] **ENFORCE: Observability.** `registerHealthIndicator: true` so breaker state is visible via `/actuator/health`
+- [ ] **AUDIT: Timeouts.** The underlying HTTP client (`RestTemplate`/`WebClient`) has `ConnectTimeout` and `ReadTimeout` configured
+- [ ] **MANDATE: Virtual Thread Compatibility.** Fallback logic is non-blocking to prevent carrier thread pinning
+
+---
+
+## AI-Assisted Code
+
+- [ ] Code follows the naming conventions of this stack
+- [ ] No secrets, tokens, or credentials were introduced by AI-generated code
+- [ ] The author understands the business logic — it was not blindly accepted from the AI
+- [ ] Tests were generated or updated alongside the implementation
+- [ ] Security-sensitive paths (auth, data access, encryption) were manually reviewed
+- [ ] AI-generated `pom.xml` / dependency changes are vetted and intentional

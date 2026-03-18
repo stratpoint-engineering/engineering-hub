@@ -139,8 +139,11 @@ body * {
 body code,
 body kbd,
 body pre,
-body samp {
+body samp,
+body code *,
+body pre * {
   font-family: var(--font-mono) !important;
+  font-size: 0.78rem !important;
 }
 
 html body {
@@ -176,7 +179,7 @@ h1, h2, h3, h4, h5, h6 {
 
 code, kbd, pre, samp {
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  font-size: 0.75em;
 }
 
 /* ─────────────────────────────────────────────
@@ -292,12 +295,21 @@ article a:hover {
 /* ─────────────────────────────────────────────
    CODE
 ───────────────────────────────────────────── */
+
+/* FileTree — matches inline code styling */
+.nextra-filetree,
+.nextra-filetree * {
+  font-family: var(--font-mono) !important;
+  font-size: 0.8rem !important;
+  color: var(--code-text) !important;
+}
+
 pre {
   background-color: var(--code-bg) !important;
   border: 1px solid var(--border) !important;
   border-radius: 6px !important;
   padding: 1rem 1.25rem !important;
-  font-size: 0.8rem !important;
+  font-size: 0.72rem !important;
 }
 
 :not(pre) > code {
@@ -306,7 +318,7 @@ pre {
   border: 1px solid var(--code-border) !important;
   border-radius: 4px !important;
   padding: 0.1em 0.35em !important;
-  font-size: 0.82em !important;
+  font-size: 0.75em !important;
 }
 
 /* ─────────────────────────────────────────────
