@@ -46,6 +46,14 @@ Use this checklist when reviewing web PRs. Items marked **[Required]** must pass
 - [ ] **[Suggested]** Colour contrast passes WCAG AA
 - [ ] **[Suggested]** ARIA labels added where native semantics are insufficient
 
+## AI-Generated Code
+
+- [ ] **[Required]** The author understands the code — they can explain it if asked
+- [ ] **[Required]** No hallucinated library methods or APIs (verify they actually exist and work as described)
+- [ ] **[Required]** Tests were not also AI-generated without review (AI tests often test the wrong thing)
+- [ ] **[Suggested]** No overly generic or boilerplate logic that doesn't fit the actual context
+- [ ] **[Suggested]** Licensing is not a concern (no verbatim reproduction of copyrighted material)
+
 ## Documentation
 
 - [ ] **[Suggested]** Complex logic has explanatory comments
