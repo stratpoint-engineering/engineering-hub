@@ -54,6 +54,7 @@ Pull these sections from the source document:
 
 | Source Section | Golden Path Section |
 |---|---|
+| *(always present)* | `## Scaffolding` — degit command pointing to `stratpoint-engineering/golden-paths/[domain]/[stack]/reference` + link to GitHub repo |
 | Project Structure | `## Project Structure` — use a `<FileTree>` component |
 | Naming Conventions | `### Naming` under `## Conventions` |
 | Code Organization | `### Patterns` under `## Conventions` |
@@ -100,6 +101,19 @@ import { Callout, Steps, FileTree, Tabs } from 'nextra/components'
 ## Prerequisites
 
 - [ ] [derived from document]
+
+## Scaffolding
+
+<Callout type="info">
+  The boilerplate for this golden path lives at [stratpoint-engineering/golden-paths](https://github.com/stratpoint-engineering/golden-paths/tree/main/[domain]/[stack]).
+</Callout>
+
+```bash
+npx degit stratpoint-engineering/golden-paths/[domain]/[stack]/reference my-app
+cd my-app
+```
+
+The Stratpoint MCP tool can also scaffold this automatically — the `manifest.json` in the repo root drives that flow.
 
 ## Project Structure
 

@@ -46,6 +46,21 @@ The Java Spring Boot golden path is the standard for building enterprise-grade R
 - [ ] IntelliJ IDEA with Lombok plugin enabled
 - [ ] PostgreSQL client (e.g., DBeaver or `psql`)
 
+## Scaffolding
+
+<Callout type="info">
+  The boilerplate for this golden path lives at [stratpoint-engineering/golden-paths](https://github.com/stratpoint-engineering/golden-paths/tree/main/backend/java-springboot).
+</Callout>
+
+```bash
+npx degit stratpoint-engineering/golden-paths/backend/java-springboot/reference my-app
+cd my-app
+cp .env.example .env
+docker compose up -d
+```
+
+The Stratpoint MCP tool can also scaffold this automatically — the `manifest.json` in the repo root drives that flow.
+
 ## Project Structure
 
 <FileTree>
