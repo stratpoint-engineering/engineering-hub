@@ -3,6 +3,7 @@ import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import { GeistMono } from 'geist/font/mono'
 import { Inter } from 'next/font/google'
+import AuthButton from '@/components/AuthButton'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -17,7 +18,11 @@ export const metadata = {
     template: '%s — Stratpoint Engineering Hub'
   },
   description: 'Stratpoint Engineering Hub — guidelines, golden paths, and best practices for every engineering domain.',
-  applicationName: 'Engineering Hub'
+  applicationName: 'Engineering Hub',
+  icons: {
+    icon: '/stratpoint_icon.svg',
+    shortcut: '/stratpoint_icon.svg',
+  }
 }
 
 const Logo = () => (
@@ -35,7 +40,7 @@ const Logo = () => (
 )
 
 export default async function RootLayout({ children }) {
-  const navbar = <Navbar logo={<Logo />} />
+  const navbar = <Navbar logo={<Logo />}><AuthButton /></Navbar>
   const pageMap = await getPageMap()
 
   return (
